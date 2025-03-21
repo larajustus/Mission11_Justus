@@ -1,0 +1,6 @@
+@Mission11_Justus_HostAddress = http://localhost:5177
+
+GET {{Mission11_Justus_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
