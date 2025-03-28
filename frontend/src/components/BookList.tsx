@@ -1,21 +1,41 @@
 import { useEffect, useState } from 'react';
-import { book } from './types/book';
+import { book } from '../types/book';
+import { useNavigate } from 'react-router-dom';
+import { CartItem } from '../types/CartItem';
+import { useCart } from '../context/CartContext';
 
-function BookList() {
+function BookList({ selectedCategories }: { selectedCategories: string[] }) {
   const [books, setBooks] = useState<book[]>([]);
   const [pageSize, setPageSize] = useState<number>(5);
   const [pageNum, setPageNum] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortOrder, setSortOrder] = useState<string | null>(null);
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
-  {
-    /*Send info to backend api*/
-  }
+  //Ran when the user clicks "Add to Cart" button
+  const handleAddToCart = (b: book) => {
+    const newItem: CartItem = {
+      bookID: b.bookID,
+      title: b.title || 'No Title',
+      author: b.author || 'Unknown Author',
+      price: b.price || 0,
+      quantity: 1,
+    };
+    addToCart(newItem);
+    navigate('/cart');
+  };
+
+  //Send info to backend api
   useEffect(() => {
     const fetchBook = async () => {
+      const categoryParams = selectedCategories
+        .map((cat) => `bookCategories=${encodeURIComponent(cat)}`)
+        .join('&');
+
       const response = await fetch(
-        `https://localhost:5000/Book?pageSize=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}`
+        `https://localhost:5000/Book?pageSize=${pageSize}&pageNum=${pageNum}&sortOrder=${sortOrder}${selectedCategories.length ? `&${categoryParams}` : ''}`
       );
       const data = await response.json();
       setBooks(data.books);
@@ -23,11 +43,10 @@ function BookList() {
       setTotalPages(Math.ceil(totalItems / pageSize));
     };
     fetchBook();
-  }, [pageSize, pageNum, totalItems, sortOrder]);
+  }, [pageSize, pageNum, totalItems, sortOrder, selectedCategories]);
 
   return (
     <>
-      <h1>Books</h1>
       <label>
         Select Sort Order:
         <select
@@ -68,6 +87,13 @@ function BookList() {
                   <strong>Price:</strong> ${b.price}
                 </li>
               </ul>
+
+              <button
+                className="btn btn-success"
+                onClick={() => handleAddToCart(b)}
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         )

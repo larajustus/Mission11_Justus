@@ -65,3 +65,4 @@
 /Users/larajustus/IS 413/Mission11_Justus/backend/Mission11_Justus/Mission11_Justus/obj/Debug/net8.0/Mission11_Justus.pdb
 /Users/larajustus/IS 413/Mission11_Justus/backend/Mission11_Justus/Mission11_Justus/obj/Debug/net8.0/Mission11_Justus.genruntimeconfig.cache
 /Users/larajustus/IS 413/Mission11_Justus/backend/Mission11_Justus/Mission11_Justus/obj/Debug/net8.0/ref/Mission11_Justus.dll
+/Users/larajustus/IS 413/Mission11_Justus/backend/Mission11_Justus/Mission11_Justus/obj/Debug/net8.0/Mission11_Justus.sourcelink.json
