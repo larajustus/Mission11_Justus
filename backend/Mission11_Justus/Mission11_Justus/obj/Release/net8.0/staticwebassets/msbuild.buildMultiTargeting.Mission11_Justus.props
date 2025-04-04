@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Mission11_Justus.props" />
+</Project>

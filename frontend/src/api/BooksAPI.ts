@@ -7,7 +7,7 @@ interface FetchBooksResponse {
 }
 
 //First part of the url that is used on every call
-const API_URL = 'https://localhost:5000/Book';
+const API_URL = 'https://mission13-backend-justus.azurewebsites.net/Book';
 
 //API Call loading up the List of Books
 export const fetchBook = async (
