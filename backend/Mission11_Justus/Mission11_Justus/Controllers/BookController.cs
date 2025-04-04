@@ -11,7 +11,7 @@ namespace Mission11_Justus.Controllers
 
         public BookController(BookDbContext temp) => _bookDbContext = temp;
 
-        [HttpGet]
+        [HttpGet("AllBooks")]
         public IActionResult GetBooks(int pageSize = 5, int pageNum = 1, string? sortOrder = null, [FromQuery] List<string>? bookCategories = null)
         {
             var books = _bookDbContext.Books.AsQueryable();
@@ -58,6 +58,51 @@ namespace Mission11_Justus.Controllers
                 .ToList();
 
             return Ok(bookCategories);
+        }
+
+        [HttpPost("AddBook")]
+        public IActionResult AddBook([FromBody] Book newBook)
+        {
+            _bookDbContext.Books.Add(newBook);
+            _bookDbContext.SaveChanges();
+            return Ok(newBook);
+        }
+
+        [HttpPut("UpdateBook/{bookID}")]
+        public IActionResult UpdateBook(int bookId, [FromBody] Book updatedBook)
+        {
+            var existingBook = _bookDbContext.Books.Find(bookId);
+
+            existingBook.Title = updatedBook.Title;
+            existingBook.Author = updatedBook.Author;
+            existingBook.Publisher = updatedBook.Publisher;
+            existingBook.ISBN = updatedBook.ISBN;
+            existingBook.Classification = updatedBook.Classification;
+            existingBook.Category = updatedBook.Category;
+            existingBook.PageCount = updatedBook.PageCount;
+            existingBook.Price = updatedBook.Price;
+
+            _bookDbContext.Books.Update(existingBook);
+            _bookDbContext.SaveChanges();
+
+            return Ok(existingBook);
+        }
+
+        [HttpDelete("DeleteBook/{bookID}")]
+
+        public IActionResult DeleteBook(int bookId)
+        {
+            var book = _bookDbContext.Books.Find(bookId);
+
+            if (book == null)
+            {
+                return NotFound(new { message = "Book not found" });
+            }
+
+            _bookDbContext.Books.Remove(book);
+            _bookDbContext.SaveChanges();
+
+            return NoContent();
         }
     }
 }
